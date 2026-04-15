@@ -68,7 +68,7 @@ mysqldump --single-transaction --set-gtid-purged=OFF \
 # Pass 2: data only, excluding ignored tables
 echo "Exporting data..."
 mysqldump --single-transaction --set-gtid-purged=OFF \
-    --no-create-info \
+    --no-create-info --skip-triggers \
     ${IGNORE_FLAGS} \
     "$DB_NAME" >> "/src/${OUTPUT_SQL}"
 
