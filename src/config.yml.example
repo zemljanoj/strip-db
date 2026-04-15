@@ -1,0 +1,104 @@
+db_name: magento_strip
+
+mode:
+  dev:
+    output_file: dump_dev.sql.gz
+    modifiers:
+      - remove_admin_password.sh
+    ignore_table_groups:
+      - customer
+      - order
+    ignore_tables:
+      - quote
+      - quote_address
+      - quote_item
+      - newsletter_subscriber
+      - logger
+      - project_productdesigner_design
+      - project_productdesigner_validation
+      - pandum_order
+      - oauth_token
+      - oauth_consumer
+      - integration
+
+  qa:
+    output_file: dump_qa.sql.gz
+    modifiers:
+      - remove_admin_password.sh
+    ignore_table_groups:
+      - customer
+      - order
+    ignore_tables:
+      - newsletter_subscriber
+      - logger
+      - oauth_token
+      - oauth_consumer
+
+ignore_table_groups:
+  customer:
+    - customer_address_entity
+    - customer_address_entity_datetime
+    - customer_address_entity_decimal
+    - customer_address_entity_int
+    - customer_address_entity_text
+    - customer_address_entity_varchar
+    - customer_dummy_cl
+    - customer_eav_attribute
+    - customer_eav_attribute_website
+    - customer_entity
+    - customer_entity_datetime
+    - customer_entity_decimal
+    - customer_entity_int
+    - customer_entity_text
+    - customer_entity_varchar
+    - customer_form_attribute
+    - customer_grid_flat
+    - customer_log
+    - customer_visitor
+    - catalog_compare_item
+    - catalog_compare_list
+    - catalog_product_frontend_action
+    - downloadable_link_purchased
+    - login_as_customer_assistance_allowed
+    - paypal_billing_agreement
+    - persistent_session
+    - product_alert_price
+    - product_alert_stock
+    - report_compared_product_index
+    - report_viewed_product_index
+    - review_detail
+    - salesrule_coupon_usage
+    - salesrule_customer
+    - vault_payment_token
+    - wishlist
+
+  order:
+    - sales_order
+    - sales_order_address
+    - sales_order_aggregated_created
+    - sales_order_aggregated_updated
+    - sales_order_grid
+    - sales_order_item
+    - sales_order_payment
+    - sales_order_status_history
+    - sales_order_tax
+    - sales_order_tax_item
+    - sales_creditmemo
+    - sales_creditmemo_comment
+    - sales_creditmemo_item
+    - sales_invoice
+    - sales_invoice_comment
+    - sales_invoice_item
+    - sales_shipment
+    - sales_shipment_comment
+    - sales_shipment_item
+    - sales_shipment_track
+    - sales_payment_transaction
+    - braintree_transaction_details
+    - inventory_order_notification
+    - inventory_pickup_location_order
+    - order_sources
+    - paypal_billing_agreement_order
+    - svea_recurring_info
+    - downloadable_link_purchased_item
+    - vault_payment_token_order_payment_link
