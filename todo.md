@@ -1,0 +1,2 @@
+- save result dump db with current user permission
+- create a modifier to clean core_config_data by path/scope list

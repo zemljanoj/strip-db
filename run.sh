@@ -17,6 +17,6 @@ docker run --rm \
     strip-db:latest \
     bash -c "
         docker-entrypoint.sh mysqld &
-        until mysqladmin ping -h localhost --silent 2>/dev/null; do sleep 1; done
+        until mysqladmin ping -h 127.0.0.1 --protocol=tcp --silent 2>/dev/null; do sleep 1; done
         bash /src/strip.sh ${ENV_NAME} ${DUMP_FILE}
     "
