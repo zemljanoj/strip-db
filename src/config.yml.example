@@ -5,6 +5,11 @@ mode:
     output_file: dump_dev.sql.gz
     modifiers:
       - remove_admin_password.sh
+      - clean_core_config.sh
+    clean_core_config:
+      - path: test/%
+        scope: default
+        scope_id: 0
     ignore_table_groups:
       - customer
       - order

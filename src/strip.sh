@@ -35,7 +35,7 @@ MODIFIER_COUNT=$(yq ".mode.${ENV_NAME}.modifiers | length" "$CONFIG")
 for i in $(seq 0 $((MODIFIER_COUNT - 1))); do
     MODIFIER=$(yq ".mode.${ENV_NAME}.modifiers[$i]" "$CONFIG")
     echo "Running modifier: ${MODIFIER}"
-    bash "/src/modifiers/${MODIFIER}" "$DB_NAME"
+    bash "/src/modifiers/${MODIFIER}" "$DB_NAME" "$ENV_NAME"
 done
 
 # Build ignore-table flags
@@ -75,6 +75,11 @@ mysqldump --single-transaction --set-gtid-purged=OFF \
 # Compress
 echo "Compressing..."
 gzip "/src/${OUTPUT_SQL}"
+
+# Fix ownership to match host user
+if [[ -n "${HOST_UID:-}" && -n "${HOST_GID:-}" ]]; then
+    chown "${HOST_UID}:${HOST_GID}" "/src/${OUTPUT_FILE}"
+fi
 
 # Cleanup
 echo "Dropping database..."
