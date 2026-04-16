@@ -38,39 +38,10 @@ for i in $(seq 0 $((MODIFIER_COUNT - 1))); do
     bash "/src/modifiers/${MODIFIER}" "$DB_NAME" "$ENV_NAME"
 done
 
-# Build ignore-table flags
-IGNORE_FLAGS=""
-
-# Resolve ignore_table_groups
-GROUP_COUNT=$(yq ".mode.${ENV_NAME}.ignore_table_groups | length" "$CONFIG")
-for i in $(seq 0 $((GROUP_COUNT - 1))); do
-    GROUP=$(yq ".mode.${ENV_NAME}.ignore_table_groups[$i]" "$CONFIG")
-    GROUP_TABLE_COUNT=$(yq ".ignore_table_groups.${GROUP} | length" "$CONFIG")
-    for j in $(seq 0 $((GROUP_TABLE_COUNT - 1))); do
-        TABLE=$(yq ".ignore_table_groups.${GROUP}[$j]" "$CONFIG")
-        IGNORE_FLAGS="${IGNORE_FLAGS} --ignore-table=${DB_NAME}.${TABLE}"
-    done
-done
-
-# Add individual ignore_tables
-TABLE_COUNT=$(yq ".mode.${ENV_NAME}.ignore_tables | length" "$CONFIG")
-for i in $(seq 0 $((TABLE_COUNT - 1))); do
-    TABLE=$(yq ".mode.${ENV_NAME}.ignore_tables[$i]" "$CONFIG")
-    IGNORE_FLAGS="${IGNORE_FLAGS} --ignore-table=${DB_NAME}.${TABLE}"
-done
-
-# Pass 1: full structure for ALL tables
-echo "Exporting structure..."
+# Export database
+echo "Exporting database..."
 mysqldump --single-transaction --set-gtid-purged=OFF \
-    --no-data \
     "$DB_NAME" > "/src/${OUTPUT_SQL}"
-
-# Pass 2: data only, excluding ignored tables
-echo "Exporting data..."
-mysqldump --single-transaction --set-gtid-purged=OFF \
-    --no-create-info --skip-triggers \
-    ${IGNORE_FLAGS} \
-    "$DB_NAME" >> "/src/${OUTPUT_SQL}"
 
 # Compress
 echo "Compressing..."

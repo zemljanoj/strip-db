@@ -6,14 +6,15 @@ mode:
     modifiers:
       - remove_admin_password.sh
       - clean_core_config.sh
+      - clean_tables.sh
     clean_core_config:
       - path: test/%
         scope: default
         scope_id: 0
-    ignore_table_groups:
+    clean_table_groups:
       - customer
       - order
-    ignore_tables:
+    clean_tables:
       - quote
       - quote_address
       - quote_item
@@ -30,16 +31,17 @@ mode:
     output_file: dump_qa.sql.gz
     modifiers:
       - remove_admin_password.sh
-    ignore_table_groups:
+      - clean_tables.sh
+    clean_table_groups:
       - customer
       - order
-    ignore_tables:
+    clean_tables:
       - newsletter_subscriber
       - logger
       - oauth_token
       - oauth_consumer
 
-ignore_table_groups:
+clean_table_groups:
   customer:
     - customer_address_entity
     - customer_address_entity_datetime
@@ -76,7 +78,6 @@ ignore_table_groups:
     - salesrule_customer
     - vault_payment_token
     - wishlist
-
   order:
     - sales_order
     - sales_order_address
