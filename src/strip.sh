@@ -42,7 +42,6 @@ done
 echo "Exporting database..."
 mariadb-dump \
   --single-transaction \
-  --compatible=mysql \
     "$DB_NAME" > "/src/${OUTPUT_SQL}"
 
 # Compress
