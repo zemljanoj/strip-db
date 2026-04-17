@@ -20,14 +20,14 @@ echo "=== Strip DB: env=${ENV_NAME}, dump=${DUMP_FILE} ==="
 
 # Create database
 echo "Creating database ${DB_NAME}..."
-mysql -e "CREATE DATABASE \`${DB_NAME}\`;"
+mariadb -e "CREATE DATABASE \`${DB_NAME}\`;"
 
 # Import dump
 echo "Importing dump..."
 if [[ "$DUMP_FILE" == *.gz ]]; then
-    gunzip -c "/src/${DUMP_FILE}" | mysql "$DB_NAME"
+    gunzip -c "/src/${DUMP_FILE}" | mariadb "$DB_NAME"
 else
-    mysql "$DB_NAME" < "/src/${DUMP_FILE}"
+    mariadb "$DB_NAME" < "/src/${DUMP_FILE}"
 fi
 
 # Run modifiers
@@ -40,7 +40,9 @@ done
 
 # Export database
 echo "Exporting database..."
-mysqldump --single-transaction --set-gtid-purged=OFF \
+mariadb-dump \
+  --single-transaction \
+  --compatible=mysql \
     "$DB_NAME" > "/src/${OUTPUT_SQL}"
 
 # Compress
@@ -54,6 +56,6 @@ fi
 
 # Cleanup
 echo "Dropping database..."
-mysql -e "DROP DATABASE \`${DB_NAME}\`;"
+mariadb -e "DROP DATABASE \`${DB_NAME}\`;"
 
 echo "=== Done: /src/${OUTPUT_FILE} ==="

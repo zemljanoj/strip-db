@@ -12,13 +12,13 @@ if [[ ! -f "src/${DUMP_FILE}" ]]; then
 fi
 
 docker run --rm \
-    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+    -e MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes \
     -e HOST_UID="$(id -u)" \
     -e HOST_GID="$(id -g)" \
     -v "$(pwd)/src:/src" \
     strip-db:latest \
     bash -c "
-        docker-entrypoint.sh mysqld --innodb-redo-log-capacity=1G &
-        until mysqladmin ping -h 127.0.0.1 --protocol=tcp --silent 2>/dev/null; do sleep 1; done
+        docker-entrypoint.sh mariadbd --innodb-log-file-size=1G &
+        until mariadb-admin ping -h 127.0.0.1 --protocol=tcp --silent 2>/dev/null; do sleep 1; done
         bash /src/strip.sh ${ENV_NAME} ${DUMP_FILE}
     "

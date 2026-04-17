@@ -21,5 +21,5 @@ for i in $(seq 0 $((COUNT - 1))); do
     SCOPE_ID=$(yq ".mode.${ENV_NAME}.clean_core_config[$i].scope_id // \"0\"" "$CONFIG")
 
     echo "  Deleting: path='${PATH_PATTERN}' scope='${SCOPE}' scope_id='${SCOPE_ID}'"
-    mysql "$DB_NAME" -e "DELETE FROM core_config_data WHERE path LIKE '${PATH_PATTERN}' AND scope = '${SCOPE}' AND scope_id = ${SCOPE_ID};"
+    mariadb "$DB_NAME" -e "DELETE FROM core_config_data WHERE path LIKE '${PATH_PATTERN}' AND scope = '${SCOPE}' AND scope_id = ${SCOPE_ID};"
 done

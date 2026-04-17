@@ -9,9 +9,9 @@ CONFIG="/src/config.yml"
 clean_table() {
     local table="$1"
     local before after
-    before=$(mysql -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM \`${table}\`;")
-    mysql "$DB_NAME" -e "DELETE FROM \`${table}\`;"
-    after=$(mysql -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM \`${table}\`;")
+    before=$(mariadb -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM \`${table}\`;")
+    mariadb "$DB_NAME" -e "DELETE FROM \`${table}\`;"
+    after=$(mariadb -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM \`${table}\`;")
     echo "  Cleaned ${table}: ${before} -> ${after}"
 }
 
